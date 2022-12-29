@@ -8,21 +8,18 @@ export const state = {
   getState() {
     return this.data;
   },
-  setState(NewState) {
-    this.data = NewState;
-    for (const cb of this.listeners) {
-      cb();
-    }
+  setState(newState: ["data"]) {
+    this.data = newState;
+    this.listeners.forEach((listener) => listener());
   },
-  suscribe(cd: (any) => any) {
-    this.listeners.push(cd);
+  subscribe(callback: (state: ["data"]) => void) {
+    this.listeners.push(callback);
   },
-  addItem(item: string) {
-    const cd = state.getState();
-    cd.list.push(item);
-    this.setState(cd);
-    console.log(cd);
+  addItem(item: any) {
+    this.data.list.push(item);
+    console.log(item);
   },
 };
-const lastState = state.setState("");
+
+const lastState = state;
 //console.log(lastState, "lastState");

@@ -1,5 +1,11 @@
 import { state } from "../../state";
 
+function storage() {
+  const localSotage = state.data.list;
+
+  console.log(localSotage, "fuera del for");
+}
+
 customElements.define(
   "custon-item",
   class extends HTMLElement {
@@ -15,7 +21,7 @@ customElements.define(
       this.shadow.innerHTML = `
 
 <div class="checkebox">
-<label class =" label" ><input type="checkbox"  class="myChecbox" value="${state}"> ${state} </label >  <br>
+<label class =" label" ><input type="checkbox"  class="myChecbox" value="${localStorage}"> ${storage()} </label >  <br>
 <label class =" label" ><input type="checkbox"  class="myChecbox" value="${state}">  ${state}</label >   <br>
 <label class =" label" ><input type="checkbox"  class="myChecbox" value="${state}">  ${state}</label >   <br>
 <label class =" label" ><input type="checkbox"  class="myChecbox" value="${state}">  ${state}</label >   <br>
@@ -59,5 +65,3 @@ customElements.define(
     }
   }
 );
-
-const title = state.getState();

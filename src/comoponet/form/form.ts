@@ -73,4 +73,4 @@ customElements.define(
     }
   }
 );
-//console.log(state + "form");
+//console.log(state.addItem() + "form");

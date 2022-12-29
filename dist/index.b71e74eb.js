@@ -602,7 +602,7 @@ customElements.define("costom-form", class extends HTMLElement {
       `;
         this.shadow.appendChild(style);
     }
-}); //console.log(state + "form");
+}); //console.log(state.addItem() + "form");
 
 },{"../../state":"1Yeju"}],"1Yeju":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -617,21 +617,19 @@ const state = {
     getState () {
         return this.data;
     },
-    setState (NewState) {
-        this.data = NewState;
-        for (const cb of this.listeners)cb();
+    setState (newState) {
+        this.data = newState;
+        this.listeners.forEach((listener)=>listener());
     },
-    suscribe (cd) {
-        this.listeners.push(cd);
+    subscribe (callback) {
+        this.listeners.push(callback);
     },
     addItem (item) {
-        const cd = state.getState();
-        cd.list.push(item);
-        this.setState(cd);
-        console.log(cd);
+        this.data.list.push(item);
+        console.log(item);
     }
 };
-const lastState = state.setState(""); //console.log(lastState, "lastState");
+const lastState = state; //console.log(lastState, "lastState");
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -665,6 +663,10 @@ exports.export = function(dest, destName, get) {
 
 },{}],"6mmxV":[function(require,module,exports) {
 var _state = require("../../state");
+function storage() {
+    const localSotage = (0, _state.state).data.list;
+    console.log(localSotage, "fuera del for");
+}
 customElements.define("custon-item", class extends HTMLElement {
     constructor(){
         super();
@@ -677,7 +679,7 @@ customElements.define("custon-item", class extends HTMLElement {
         this.shadow.innerHTML = `
 
 <div class="checkebox">
-<label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}"> ${0, _state.state} </label >  <br>
+<label class =" label" ><input type="checkbox"  class="myChecbox" value="${localStorage}"> ${storage()} </label >  <br>
 <label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}">  ${0, _state.state}</label >   <br>
 <label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}">  ${0, _state.state}</label >   <br>
 <label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}">  ${0, _state.state}</label >   <br>
@@ -720,7 +722,6 @@ customElements.define("custon-item", class extends HTMLElement {
         this.shadow.appendChild(style);
     }
 });
-const title = (0, _state.state).getState();
 
 },{"../../state":"1Yeju"}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequirec402")
 
