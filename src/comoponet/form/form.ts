@@ -3,30 +3,30 @@ import { state } from "../../state";
 customElements.define(
   "costom-form",
   class extends HTMLElement {
-    shadow: ShadowRoot;
+    shadow = this.attachShadow({ mode: "open" });
+
     constructor() {
       super();
-      this.shadow = this.attachShadow({ mode: "open" });
+
       this.render();
-      this.addTrasksForm();
     }
-    addTrasksForm() {
-      const fromEl = this.shadow.querySelector(".form") as HTMLElement;
-      fromEl.addEventListener("submit", (e: any) => {
+
+    connectedCallback() {
+      const form: any = this.shadow.querySelector(".form");
+      form.addEventListener("submit", (e) => {
         e.preventDefault();
-        //console.log(e.target.name.value);
-        if (e.target.name.value == "") {
-          null;
-        } else {
-          state.addItem(e.target.name.value);
-        }
+
+        const f = e.target as any;
+
+        state.addItem(f.text.value);
+        // console.log(f.text.value, "form");
       });
     }
     render() {
       this.shadow.innerHTML = `
       <form class="form">
    
-        <input type="text" name="name" class="form__input"  placeholder="Nuevo pendiente" /input>
+        <input  name="text" class="form__input"  placeholder="Nuevo pendiente" />
         <button class="form__button">+</button>
       </form>
     `;
@@ -42,8 +42,7 @@ customElements.define(
         justify-content: center;
         align-items: center;
         border-radius: 4px;
-        height: 100% ;
-        width: 100%;
+     
       }   
       .form__label {
         font-size: 18px;
@@ -53,8 +52,7 @@ customElements.define(
       .form__input {
         font-size: 24px;
         font-family: "Roboto";
-        width: 30vh;
-        height: 5vh;
+       
         border: 2px solid #000000;
         border-radius: 4px;
       }
@@ -62,8 +60,7 @@ customElements.define(
         background-color: #9CBBE9;
         font-size: 24px;
         font-weight: 400;
-        width:30hh;
-        height: 5vh;
+      
         border: 2px solid #000000;
         border-radius: 4px;
       }
@@ -73,4 +70,3 @@ customElements.define(
     }
   }
 );
-//console.log(state.addItem() + "form");

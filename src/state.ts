@@ -1,6 +1,5 @@
-export const state = {
+const state = {
   data: {
-    idConter: 0,
     list: [],
   },
 
@@ -8,18 +7,35 @@ export const state = {
   getState() {
     return this.data;
   },
-  setState(newState: ["data"]) {
+  setState(newState) {
     this.data = newState;
-    this.listeners.forEach((listener) => listener());
+    for (const cb of this.listeners) {
+      cb();
+    }
+    console.log(" soy el state y e cambiado", this.data);
   },
-  subscribe(callback: (state: ["data"]) => void) {
+  subscribe(callback: (any) => any) {
     this.listeners.push(callback);
   },
-  addItem(item: any) {
-    this.data.list.push(item);
-    console.log(item);
+  addItem(item: string) {
+    const cs = this.getState();
+    cs.list.push(item);
+    this.setState(cs);
+  },
+  removeItem(string: string) {
+    console.log("soy el string que recibo del main " + string);
+    const cs = state.getState();
+    // const resultado = cs.list.filter((i) => {
+    //   return i !== string;
+    // });
+
+    //console.log(resultado)
+    // this.setState(cs);
+    cs.list.filter((i) => {
+      return i !== string;
+    });
+
+    console.log(cs.list);
   },
 };
-
-const lastState = state;
-//console.log(lastState, "lastState");
+export { state };

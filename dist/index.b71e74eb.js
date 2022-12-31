@@ -533,33 +533,32 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"h7u1C":[function(require,module,exports) {
 var _form = require("./comoponet/form/form");
-var _listItem = require("./comoponet/list-item");
+var _index = require("./comoponet/list-item/index");
 
-},{"./comoponet/form/form":"kBqDQ","./comoponet/list-item":"6mmxV"}],"kBqDQ":[function(require,module,exports) {
+},{"./comoponet/form/form":"kBqDQ","./comoponet/list-item/index":"6mmxV"}],"kBqDQ":[function(require,module,exports) {
 var _state = require("../../state");
 customElements.define("costom-form", class extends HTMLElement {
+    shadow = this.attachShadow({
+        mode: "open"
+    });
     constructor(){
         super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
         this.render();
-        this.addTrasksForm();
     }
-    addTrasksForm() {
-        const fromEl = this.shadow.querySelector(".form");
-        fromEl.addEventListener("submit", (e)=>{
+    connectedCallback() {
+        const form = this.shadow.querySelector(".form");
+        form.addEventListener("submit", (e)=>{
             e.preventDefault();
-            //console.log(e.target.name.value);
-            if (e.target.name.value == "") ;
-            else (0, _state.state).addItem(e.target.name.value);
+            const f = e.target;
+            (0, _state.state).addItem(f.text.value);
+        // console.log(f.text.value, "form");
         });
     }
     render() {
         this.shadow.innerHTML = `
       <form class="form">
    
-        <input type="text" name="name" class="form__input"  placeholder="Nuevo pendiente" /input>
+        <input  name="text" class="form__input"  placeholder="Nuevo pendiente" />
         <button class="form__button">+</button>
       </form>
     `;
@@ -574,8 +573,7 @@ customElements.define("costom-form", class extends HTMLElement {
         justify-content: center;
         align-items: center;
         border-radius: 4px;
-        height: 100% ;
-        width: 100%;
+     
       }   
       .form__label {
         font-size: 18px;
@@ -585,8 +583,7 @@ customElements.define("costom-form", class extends HTMLElement {
       .form__input {
         font-size: 24px;
         font-family: "Roboto";
-        width: 30vh;
-        height: 5vh;
+       
         border: 2px solid #000000;
         border-radius: 4px;
       }
@@ -594,15 +591,14 @@ customElements.define("costom-form", class extends HTMLElement {
         background-color: #9CBBE9;
         font-size: 24px;
         font-weight: 400;
-        width:30hh;
-        height: 5vh;
+      
         border: 2px solid #000000;
         border-radius: 4px;
       }
       `;
         this.shadow.appendChild(style);
     }
-}); //console.log(state.addItem() + "form");
+});
 
 },{"../../state":"1Yeju"}],"1Yeju":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -610,7 +606,6 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 const state = {
     data: {
-        idConter: 0,
         list: []
     },
     listeners: [],
@@ -619,17 +614,31 @@ const state = {
     },
     setState (newState) {
         this.data = newState;
-        this.listeners.forEach((listener)=>listener());
+        for (const cb of this.listeners)cb();
+        console.log(" soy el state y e cambiado", this.data);
     },
     subscribe (callback) {
         this.listeners.push(callback);
     },
     addItem (item) {
-        this.data.list.push(item);
-        console.log(item);
+        const cs = this.getState();
+        cs.list.push(item);
+        this.setState(cs);
+    },
+    removeItem (string) {
+        console.log("soy el string que recibo del main " + string);
+        const cs = state.getState();
+        // const resultado = cs.list.filter((i) => {
+        //   return i !== string;
+        // });
+        //console.log(resultado)
+        // this.setState(cs);
+        cs.list.filter((i)=>{
+            return i !== string;
+        });
+        console.log(cs.list);
     }
 };
-const lastState = state; //console.log(lastState, "lastState");
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -662,67 +671,47 @@ exports.export = function(dest, destName, get) {
 };
 
 },{}],"6mmxV":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ListItem", ()=>ListItem);
 var _state = require("../../state");
-function storage() {
-    const localSotage = (0, _state.state).data.list;
-    console.log(localSotage, "fuera del for");
-}
-customElements.define("custon-item", class extends HTMLElement {
+class ListItem extends HTMLElement {
+    // shadow = this.attachShadow({ mode: "open" });
     constructor(){
         super();
-        this.shadow = this.attachShadow({
-            mode: "open"
-        });
         this.render();
     }
-    render() {
-        this.shadow.innerHTML = `
-
-<div class="checkebox">
-<label class =" label" ><input type="checkbox"  class="myChecbox" value="${localStorage}"> ${storage()} </label >  <br>
-<label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}">  ${0, _state.state}</label >   <br>
-<label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}">  ${0, _state.state}</label >   <br>
-<label class =" label" ><input type="checkbox"  class="myChecbox" value="${0, _state.state}">  ${0, _state.state}</label >   <br>
-</div>
-        `;
-        const style = document.createElement("style");
-        style.innerHTML = `
-  
-      .checkebox{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        border: 2px solid #000000;
-        padding:3px;
-        margin: 5px;
-        background-color: #F5CBA7;
-        justify-content: center;
-        align-items: center;
-        border-radius: 4px;
-        height: 100% ;
-        width: 100%;
-      }
-      .label {
-        margin-top: 5px;
-        font-size:30px;
-        border-bottom: 3px solid #000;
-      }
-      .myChecbox{
-      
-        background-color: #fff;
-        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
-        width: 28px;
-        height: 28px;
-
-        border: 2px solid #888;
-}
-
-        `;
-        this.shadow.appendChild(style);
+    connecteCallback() {
+        (0, _state.state).subscribe(()=>{
+            this.render();
+        });
     }
-});
+    render() {
+        const list = (0, _state.state).getState().list;
+        console.log(list.list);
+        const div = document.createElement("div");
+        div.className = "lista";
+        div.innerHTML = `
 
-},{"../../state":"1Yeju"}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequirec402")
+   
+      <div style=" border : solid 5px red">
+     <h1>Lista de pendientes</h1>
+    
+     ${list.map((item)=>{
+            return `<div class="item">
+         <input class="checkbox" type="checkbox">
+         <p class="itemText">${item}</p>
+         </div>`;
+        })}
+      
+     
+      </div>       
+      `;
+        this.appendChild(div);
+    }
+}
+customElements.define("custon-item", ListItem);
+
+},{"../../state":"1Yeju","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequirec402")
 
 //# sourceMappingURL=index.b71e74eb.js.map
