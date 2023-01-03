@@ -25,17 +25,12 @@ const state = {
   removeItem(string: string) {
     console.log("soy el string que recibo del main " + string);
     const cs = state.getState();
-    // const resultado = cs.list.filter((i) => {
-    //   return i !== string;
-    // });
 
-    //console.log(resultado)
-    // this.setState(cs);
     cs.list.filter((i) => {
       return i !== string;
     });
 
-    console.log(cs.list);
+    console.log(cs.list, "soy la lista filtrada");
   },
 };
 export { state };

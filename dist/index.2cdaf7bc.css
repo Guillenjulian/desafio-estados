@@ -13,4 +13,16 @@
   display: flex;
 }
 
+.container1 {
+  height: 500px;
+  width: 500px;
+  text-align: center;
+  background-color: #c4c4c4;
+  border: 2px solid #000;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  display: flex;
+}
+
 /*# sourceMappingURL=index.2cdaf7bc.css.map */

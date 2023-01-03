@@ -532,10 +532,14 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"h7u1C":[function(require,module,exports) {
+var _state = require("./state");
 var _form = require("./comoponet/form/form");
 var _index = require("./comoponet/list-item/index");
+(0, _state.state).subscribe(function() {
+    localStorage.setItem("state-cache", JSON.stringify((0, _state.state).getState()));
+});
 
-},{"./comoponet/form/form":"kBqDQ","./comoponet/list-item/index":"6mmxV"}],"kBqDQ":[function(require,module,exports) {
+},{"./comoponet/form/form":"kBqDQ","./comoponet/list-item/index":"6mmxV","./state":"1Yeju"}],"kBqDQ":[function(require,module,exports) {
 var _state = require("../../state");
 customElements.define("costom-form", class extends HTMLElement {
     shadow = this.attachShadow({
@@ -628,15 +632,10 @@ const state = {
     removeItem (string) {
         console.log("soy el string que recibo del main " + string);
         const cs = state.getState();
-        // const resultado = cs.list.filter((i) => {
-        //   return i !== string;
-        // });
-        //console.log(resultado)
-        // this.setState(cs);
         cs.list.filter((i)=>{
             return i !== string;
         });
-        console.log(cs.list);
+        console.log(cs.list, "soy la lista filtrada");
     }
 };
 
@@ -679,7 +678,7 @@ class ListItem extends HTMLElement {
     // shadow = this.attachShadow({ mode: "open" });
     constructor(){
         super();
-        this.render();
+        this.connecteCallback();
     }
     connecteCallback() {
         (0, _state.state).subscribe(()=>{
@@ -688,25 +687,42 @@ class ListItem extends HTMLElement {
     }
     render() {
         const list = (0, _state.state).getState().list;
-        console.log(list.list);
+        console.log(list.length, "soy la lista");
         const div = document.createElement("div");
+        const style = document.createElement("style");
         div.className = "lista";
         div.innerHTML = `
-
-   
-      <div style=" border : solid 5px red">
-     <h1>Lista de pendientes</h1>
-    
+ 
+    <div  >;
      ${list.map((item)=>{
-            return `<div class="item">
-         <input class="checkbox" type="checkbox">
-         <p class="itemText">${item}</p>
-         </div>`;
-        })}
+            return `<div class="item" ">      
+       
+        <input class="checkbox" type="checkbox">
+        <label class="label" id=${list.length} for="checkbox">${item}</label>
       
-     
-      </div>       
+        </div>`;
+        })}
+    </div>
+     `;
+        style.innerHTML = `
+   
+    .lista {display: flex;
+      flex-direction: column; 
+      gap: 10px;}
+      .item {
+        display: flex;  
+        gap: 10px;  
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #000000;
+        background-color:  #B2EBF2;
+        border-radius: 4px;
+        flex-direction: row;
+        font-size: 24px;
+      }
       `;
+        div.appendChild(style);
+        this.firstChild?.remove();
         this.appendChild(div);
     }
 }

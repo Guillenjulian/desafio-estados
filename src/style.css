@@ -14,3 +14,14 @@
   gap: 3vh;
   background-color: beige;
 }
+.container1 {
+  height: 500px;
+  width: 500px;
+  border: 2px solid #000;
+  background-color: #c4c4c4;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+}
