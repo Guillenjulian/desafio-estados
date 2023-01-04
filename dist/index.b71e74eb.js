@@ -533,13 +533,15 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"h7u1C":[function(require,module,exports) {
 var _state = require("./state");
+var _index = require("./comoponet/header/index");
 var _form = require("./comoponet/form/form");
-var _index = require("./comoponet/list-item/index");
+var _index1 = require("./comoponet/list-item/index");
+var _index2 = require("./comoponet/footer/index");
 (0, _state.state).subscribe(function() {
     localStorage.setItem("state-cache", JSON.stringify((0, _state.state).getState()));
 });
 
-},{"./comoponet/form/form":"kBqDQ","./comoponet/list-item/index":"6mmxV","./state":"1Yeju"}],"kBqDQ":[function(require,module,exports) {
+},{"./comoponet/form/form":"kBqDQ","./comoponet/list-item/index":"6mmxV","./state":"1Yeju","./comoponet/footer/index":"cl1vX","./comoponet/header/index":"048HH"}],"kBqDQ":[function(require,module,exports) {
 var _state = require("../../state");
 customElements.define("costom-form", class extends HTMLElement {
     shadow = this.attachShadow({
@@ -573,10 +575,11 @@ customElements.define("costom-form", class extends HTMLElement {
         display: flex;
         gap: 3px;
         border: 2px solid #000000;
-        background-color:  #B2EBF2;
+        background-color:  #8e96f4;
         justify-content: center;
         align-items: center;
         border-radius: 4px;
+        height: 50px;
      
       }   
       .form__label {
@@ -619,7 +622,7 @@ const state = {
     setState (newState) {
         this.data = newState;
         for (const cb of this.listeners)cb();
-        console.log(" soy el state y e cambiado", this.data);
+    // console.log(" soy el state y e cambiado", this.data);
     },
     subscribe (callback) {
         this.listeners.push(callback);
@@ -628,14 +631,6 @@ const state = {
         const cs = this.getState();
         cs.list.push(item);
         this.setState(cs);
-    },
-    removeItem (string) {
-        console.log("soy el string que recibo del main " + string);
-        const cs = state.getState();
-        cs.list.filter((i)=>{
-            return i !== string;
-        });
-        console.log(cs.list, "soy la lista filtrada");
     }
 };
 
@@ -685,40 +680,49 @@ class ListItem extends HTMLElement {
             this.render();
         });
     }
+    // addEventListener del checkbox
     render() {
         const list = (0, _state.state).getState().list;
-        console.log(list.length, "soy la lista");
+        const listLength = list.length - 1;
         const div = document.createElement("div");
         const style = document.createElement("style");
         div.className = "lista";
         div.innerHTML = `
- 
-    <div  >;
-     ${list.map((item)=>{
-            return `<div class="item" ">      
-       
-        <input class="checkbox" type="checkbox">
-        <label class="label" id=${list.length} for="checkbox">${item}</label>
-      
-        </div>`;
+    
+    <div>    ${list.map((item)=>{
+            return `<div class="item" >       
+      <input class="checkbox" type="checkbox" >
+      <label class="label" id=${listLength} for="checkbox">
+      ${item}
+      </label>      
+      </div>`;
         })}
     </div>
-     `;
+    `;
         style.innerHTML = `
-   
+    
     .lista {display: flex;
-      flex-direction: column; 
-      gap: 10px;}
+     
+    }
+    
       .item {
         display: flex;  
         gap: 10px;  
         align-items: center;
         justify-content: center;
-        border: 2px solid #000000;
-        background-color:  #B2EBF2;
         border-radius: 4px;
         flex-direction: row;
         font-size: 24px;
+      }
+    
+      input[type="checkbox"] + label {
+        text-decoration: none;
+        color: #000;
+      }
+      
+      input[type="checkbox"]:checked + label {
+        text-decoration: line-through;
+        color: #999;
       }
       `;
         div.appendChild(style);
@@ -728,6 +732,75 @@ class ListItem extends HTMLElement {
 }
 customElements.define("custon-item", ListItem);
 
-},{"../../state":"1Yeju","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequirec402")
+},{"../../state":"1Yeju","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cl1vX":[function(require,module,exports) {
+customElements.define("custom-footer", class extends HTMLElement {
+    constructor(){
+        super();
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+        this.render();
+    }
+    render() {
+        this.shadow.innerHTML = `
+    <footer class="footer">
+      <p class="footer__text">Footer</p>
+    </footer>
+    `;
+        const style = document.createElement("style");
+        style.innerHTML = `
+    .footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100% ;
+      width: 100%;
+    }
+    .footer__text {
+      font-size: 18px;
+      font-family: "Roboto";
+      font-weight: 500;
+    }
+    `;
+        this.shadow.appendChild(style);
+        this.shadow;
+    }
+});
+
+},{}],"048HH":[function(require,module,exports) {
+customElements.define("custon-header", class extends HTMLElement {
+    constructor(){
+        super();
+        this.shadow = this.attachShadow({
+            mode: "open"
+        });
+        this.render();
+    }
+    render() {
+        this.shadow.innerHTML = `
+            <header class="header">
+                <h1 class="header__title">Lista de tareas</h1>
+            </header>
+            `;
+        const style = document.createElement("style");
+        style.innerHTML = `
+            .header {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100% ;
+                width: 100%;
+            }
+            .header__title {
+                font-size: 18px;
+                font-family: "Roboto";
+                font-weight: 500;
+            }
+            `;
+        this.shadow.appendChild(style);
+    }
+});
+
+},{}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequirec402")
 
 //# sourceMappingURL=index.b71e74eb.js.map

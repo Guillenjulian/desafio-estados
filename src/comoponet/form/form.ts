@@ -38,10 +38,11 @@ customElements.define(
         display: flex;
         gap: 3px;
         border: 2px solid #000000;
-        background-color:  #B2EBF2;
+        background-color:  #8e96f4;
         justify-content: center;
         align-items: center;
         border-radius: 4px;
+        height: 50px;
      
       }   
       .form__label {

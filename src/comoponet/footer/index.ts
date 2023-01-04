@@ -29,6 +29,7 @@ customElements.define(
     }
     `;
       this.shadow.appendChild(style);
+      this.shadow;
     }
   }
 );
